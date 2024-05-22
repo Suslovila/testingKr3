@@ -61,7 +61,7 @@ Node* innerInsert2(Node *node, char *key, char *value, Node* predecessor) {
 }
 
 int insert2(Tree *tree, char *key, char *info) {
-    if(!tree) return false;
+    if(tree == NULL) return false;
     if(tree->root == NULL) {
         tree->root = createNode(key, info, NULL);
         return true;
@@ -72,7 +72,7 @@ int insert2(Tree *tree, char *key, char *info) {
 }
 
 Node* search2(Node* node, char* key) {
-    if(!node) return NULL;
+    if(node == NULL) return NULL;
 
     int compare = strcmp(key, node->key);
 
@@ -134,7 +134,7 @@ Node* innerDelete2(Node* node, char* key) {
 }
 
 boolean delete(Tree* tree, char* key) {
-    if(!tree || !key) return false;
+    if(tree == NULL || key == NULL) return false;
     if(search2(tree->root, key) == NULL) return false;
 
     innerDelete2(tree->root, key);
