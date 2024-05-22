@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "stdlib.h"
 #include "string.h"
 
@@ -109,7 +110,9 @@ Node* innerDelete2(Node* node, char* key) {
     if(compare == 0) {
         if(node->left != NULL && node->right != NULL) {
             free(node->key);
+
             node->key = findMin(node->right)->key;
+
             node->right = innerDelete2(node->right, node->key); // now searching for the value we put to the end
 
         }
@@ -126,7 +129,6 @@ Node* innerDelete2(Node* node, char* key) {
             }
             if(node->right == NULL && node->left == NULL) {
                 freeNode(node);
-                node = NULL;
             }
         }
     }
@@ -159,15 +161,33 @@ void freeTree(Node *root) {
 
     freeNode(root);
 }
+#define DELTA 10
 
+void printTreeRecursive(Node *root, int space) {
+    if (root == NULL)
+        return;
+    space += DELTA;
+    printTreeRecursive(root->right, space);
+    printf("\n");
+    for (int i = DELTA; i < space; i++) {
+        printf(" ");
+    }
+    printf("%s,  %s\n", root->key, root->value);
+    printTreeRecursive(root->left, space);
+}
+
+void printTreeVer2(Node *root) {
+    printTreeRecursive(root, 0);
+}
 
 int main() {
     Tree* tree = malloc(sizeof(Tree));
     tree->root = NULL;
     insert2(tree, copyString("boob"), copyString("what"));
     insert2(tree, copyString("boobrr"), copyString("w3eehat"));
-    delete(tree, "boob");
-    delete(tree, "boobrr");
+    printTreeVer2(tree->root);
+    //delete(tree, "boob");
+    //delete(tree, "boobrr");
 
     freeTree(tree->root);
     free(tree);
