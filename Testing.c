@@ -172,11 +172,11 @@ Node * innerDelete(Node * root, char * key) {
             } else if (root -> left == NULL) {
                 Node * tmp = root;
                 root = root -> right;
-                free(tmp);
+                freeNode(tmp);
             } else if (root -> right == NULL) {
                 Node * tmp = root;
                 root = root -> left;
-                free(tmp);
+                freeNode(tmp);
             }
         } else {
             Node * mn = findMin(root -> right);
