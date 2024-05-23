@@ -155,43 +155,77 @@ Node *findMin(Node *node) {
 //    return true;
 //}
 
-Node * innerDelete(Node * root, char * key) {
-    if (root == NULL)
-        return NULL;
+//Node * innerDelete(Node * root, char * key) {
+//    if (root == NULL)
+//        return NULL;
+//
+//    if (strcmp(key, root -> key) < 0) {
+//        root -> left = innerDelete(root -> left, key);
+//    } else if (strcmp(key, root -> key) > 0) {
+//        root -> right = innerDelete(root -> right, key);
+//    } else {
+//
+//        if (root -> left == NULL || root -> right == NULL) {
+//            if (root -> left == NULL && root -> right == NULL) {
+//                freeNode(root);
+//                root = NULL;
+//            } else if (root -> left == NULL) {
+//                Node * tmp = root;
+//                root = root -> right;
+//                freeNode(tmp);
+//            } else if (root -> right == NULL) {
+//                Node * tmp = root;
+//                root = root -> left;
+//                freeNode(tmp);
+//            }
+//        } else {
+//            Node * mn = findMin(root -> right);
+//            root -> key = copyString(mn -> key);
+//            root -> right = innerDelete(root -> right, mn -> key);
+//        }
+//    }
+//
+//    return root;
+//}
 
-    if (strcmp(key, root -> key) < 0) {
-        root -> left = innerDelete(root -> left, key);
-    } else if (strcmp(key, root -> key) > 0) {
-        root -> right = innerDelete(root -> right, key);
-    } else {
-
-        if (root -> left == NULL || root -> right == NULL) {
-            if (root -> left == NULL && root -> right == NULL) {
-                freeNode(root);
-                root = NULL;
-            } else if (root -> left == NULL) {
-                Node * tmp = root;
-                root = root -> right;
-                freeNode(tmp);
-            } else if (root -> right == NULL) {
-                Node * tmp = root;
-                root = root -> left;
+Node* testingDelete(Node* node, char* key) {
+    if(node == NULL) return NULL;
+    if(strcmp(key, node->key) < 0) {
+        node->left = testingDelete(node->left, key);
+    }
+    else if(strcmp(key, node->key) > 0) {
+        node->right = testingDelete(node->right, key);
+    }
+    else {
+        if(node->left == NULL || node->right == NULL) {
+            if(node->left == NULL && node->right == NULL) {
+                freeNode(node);
+                node = NULL;
+            }
+            else if(node->left == NULL) {
+                Node* tmp = node;
+                node = node->right;
                 freeNode(tmp);
             }
-        } else {
-            Node * mn = findMin(root -> right);
-            root -> key = mn -> key;
-            root -> right = innerDelete(root -> right, mn -> key);
+            else if(node->right == NULL) {
+                Node* tmp = node;
+                node = node->left;
+                freeNode(tmp);
+            }
+            else {
+                Node* mn = findMin(node->right);
+                node->key = copyString(mn->key);
+                node->right = testingDelete(node->right, mn->key);
+            }
         }
     }
-
-    return root;
+    return node;
 }
 
 int delete(Tree * tree, char * key) {
     if (tree == NULL || key == NULL || search2(tree -> root, key) == 0)
         return 1;
-    tree -> root = innerDelete(tree -> root, key);
+    tree -> root = testingDelete(tree -> root, key);
     return 0;
 }
 
