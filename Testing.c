@@ -21,6 +21,14 @@ typedef struct Tree {
 void freeNode(Node *pNode);
 
 
+char *copyString(char *string) {
+    int length = strlen(string);
+    char *result = calloc(length + 1, sizeof(char));
+    for (int i = 0; i < length; i++) {
+        result[i] = string[i];
+    }
+    return result;
+}
 
 void freeNode(Node *pNode) {
     free(pNode->key);
@@ -111,7 +119,7 @@ Node* innerDelete2(Node* node, char* key) {
         if(node->left != NULL && node->right != NULL) {
             free(node->key);
 
-            node->key = findMin(node->right)->key;
+            node->key = copyString(findMin(node->right)->key);
 
             node->right = innerDelete2(node->right, node->key); // now searching for the value we put to the end
 
@@ -143,14 +151,7 @@ boolean delete(Tree* tree, char* key) {
     return true;
 }
 
-char *copyString(char *string) {
-    int length = strlen(string);
-    char *result = calloc(length + 1, sizeof(char));
-    for (int i = 0; i < length; i++) {
-        result[i] = string[i];
-    }
-    return result;
-}
+
 
 void freeTree(Node *root) {
     if (root == NULL) {
