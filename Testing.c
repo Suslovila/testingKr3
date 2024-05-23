@@ -31,21 +31,19 @@ char *copyString(char *string) {
 }
 
 void freeNode(Node *pNode) {
-    if(pNode == NULL) return;
+    if (pNode == NULL) return;
     free(pNode->key);
     free(pNode->value);
     free(pNode);
 }
 
 
-
-
 #define true 1
 #define false 0
 #define boolean int
 
-Node* createNode(char *key, char *value, Node* predecessor) {
-    Node* newNode = malloc(sizeof(Node));
+Node *createNode(char *key, char *value, Node *predecessor) {
+    Node *newNode = malloc(sizeof(Node));
     newNode->parent = predecessor;
     newNode->key = key;
     newNode->value = value;
@@ -55,15 +53,15 @@ Node* createNode(char *key, char *value, Node* predecessor) {
     return newNode;
 }
 
-Node* innerInsert2(Node *node, char *key, char *value, Node* predecessor) {
-    if(node == NULL) {
+Node *innerInsert2(Node *node, char *key, char *value, Node *predecessor) {
+    if (node == NULL) {
         return createNode(key, value, predecessor);
     }
     int compare = strcmp(key, node->key);
-    if(compare < 0) {
+    if (compare < 0) {
         node->left = innerInsert2(node->left, key, value, node);
     }
-    if(compare > 0) {
+    if (compare > 0) {
         node->right = innerInsert2(node->right, key, value, node);
     }
 
@@ -71,8 +69,8 @@ Node* innerInsert2(Node *node, char *key, char *value, Node* predecessor) {
 }
 
 int insert2(Tree *tree, char *key, char *info) {
-    if(tree == NULL) return false;
-    if(tree->root == NULL) {
+    if (tree == NULL) return false;
+    if (tree->root == NULL) {
         tree->root = createNode(key, info, NULL);
         return true;
     }
@@ -81,18 +79,18 @@ int insert2(Tree *tree, char *key, char *info) {
     return true;
 }
 
-Node* search2(Node* node, char* key) {
-    if(node == NULL) return NULL;
+Node *search2(Node *node, char *key) {
+    if (node == NULL) return NULL;
 
     int compare = strcmp(key, node->key);
 
-    if(compare < 0) {
+    if (compare < 0) {
         return search2(node->left, key);
     }
-    if(compare > 0) {
+    if (compare > 0) {
         return search2(node->right, key);
     }
-    if(compare == 0) {
+    if (compare == 0) {
         return node;
     }
 }
@@ -188,49 +186,42 @@ Node *findMin(Node *node) {
 //    return root;
 //}
 
-Node* testingDelete(Node* node, char* key) {
-    if(node == NULL) return NULL;
-    if(strcmp(key, node->key) < 0) {
+Node *testingDelete(Node *node, char *key) {
+    if (node == NULL) return NULL;
+    if (strcmp(key, node->key) < 0) {
         node->left = testingDelete(node->left, key);
-    }
-    else if(strcmp(key, node->key) > 0) {
+    } else if (strcmp(key, node->key) > 0) {
         node->right = testingDelete(node->right, key);
-    }
-    else {
-        if(node->left == NULL || node->right == NULL) {
-            if(node->left == NULL && node->right == NULL) {
+    } else {
+        if (node->left == NULL || node->right == NULL) {
+            if (node->left == NULL && node->right == NULL) {
                 freeNode(node);
                 node = NULL;
-            }
-            else if(node->left == NULL) {
-                Node* tmp = node;
+            } else if (node->left == NULL) {
+                Node *tmp = node;
                 node = node->right;
                 freeNode(tmp);
-            }
-            else if(node->right == NULL) {
-                Node* tmp = node;
+            } else if (node->right == NULL) {
+                Node *tmp = node;
                 node = node->left;
                 freeNode(tmp);
             }
-            else {
-                Node* mn = findMin(node->right);
-                free(node->key);
-                node->key = copyString(mn->key);
-                node->right = testingDelete(node->right, mn->key);
-            }
+        } else {
+            Node *mn = findMin(node->right);
+            free(node->key);
+            node->key = copyString(mn->key);
+            node->right = testingDelete(node->right, mn->key);
         }
     }
     return node;
 }
 
-int delete(Tree * tree, char * key) {
-    if (tree == NULL || key == NULL || search2(tree -> root, key) == 0)
+int delete(Tree *tree, char *key) {
+    if (tree == NULL || key == NULL || search2(tree->root, key) == 0)
         return 1;
-    tree -> root = testingDelete(tree -> root, key);
+    tree->root = testingDelete(tree->root, key);
     return 0;
 }
-
-
 
 
 void freeTree(Node *root) {
@@ -242,6 +233,7 @@ void freeTree(Node *root) {
 
     freeNode(root);
 }
+
 #define DELTA 10
 
 void printTreeRecursive(Node *root, int space) {
@@ -262,10 +254,13 @@ void printTreeVer2(Node *root) {
 }
 
 int main() {
-    Tree* tree = malloc(sizeof(Tree));
+    Tree *tree = malloc(sizeof(Tree));
     tree->root = NULL;
     insert2(tree, copyString("boob"), copyString("what"));
     insert2(tree, copyString("boobrr"), copyString("w3eehat"));
+    insert2(tree, copyString("34534boorerbrr"), copyString("w3eehat"));
+    insert2(tree, copyString("64564b75oobrr"), copyString("w3eehat"));
+
     printTreeVer2(tree->root);
 //    search2(tree->root, "454");
     delete(tree, "boob");
