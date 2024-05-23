@@ -214,6 +214,7 @@ Node* testingDelete(Node* node, char* key) {
             }
             else {
                 Node* mn = findMin(node->right);
+                free(node->key);
                 node->key = copyString(mn->key);
                 node->right = testingDelete(node->right, mn->key);
             }
