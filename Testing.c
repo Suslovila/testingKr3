@@ -210,6 +210,8 @@ Node *testingDelete(Node *node, char *key) {
             Node *mn = findMin(node->right);
             free(node->key);
             node->key = copyString(mn->key);
+            free(node->value);
+            node->value = copyString(mn->value);
             node->right = testingDelete(node->right, mn->key);
         }
     }
