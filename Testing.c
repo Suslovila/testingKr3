@@ -149,7 +149,7 @@ boolean delete(Tree* tree, char* key) {
     if(tree == NULL || key == NULL) return false;
     if(search2(tree->root, key) == NULL) return false;
 
-    //innerDelete2(tree->root, key);
+    innerDelete2(tree->root, key);
     return true;
 }
 
