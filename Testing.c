@@ -31,6 +31,7 @@ char *copyString(char *string) {
 }
 
 void freeNode(Node *pNode) {
+    if(pNode == NULL) return;
     free(pNode->key);
     free(pNode->value);
     free(pNode);
@@ -139,6 +140,7 @@ Node* innerDelete2(Node* node, char* key) {
             }
             if(node->right == NULL && node->left == NULL) {
                 freeNode(node);
+                node = NULL;
             }
         }
     }
@@ -149,7 +151,7 @@ boolean delete(Tree* tree, char* key) {
     if(tree == NULL || key == NULL) return false;
     if(search2(tree->root, key) == NULL) return false;
 
-    innerDelete2(tree->root, key);
+    tree->root = innerDelete2(tree->root, key);
     return true;
 }
 
@@ -189,9 +191,15 @@ int main() {
     insert2(tree, copyString("boob"), copyString("what"));
     insert2(tree, copyString("boobrr"), copyString("w3eehat"));
     printTreeVer2(tree->root);
+//    search2(tree->root, "454");
     delete(tree, "boob");
-    delete(tree, "boobrr");
+//    delete(tree, "boobrr");
+    printTreeVer2(tree->root);
+    printTreeVer2(tree->root);
+    printTreeVer2(tree->root);
 
     freeTree(tree->root);
     free(tree);
 }
+
+
