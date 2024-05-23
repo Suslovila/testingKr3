@@ -104,56 +104,97 @@ Node *findMin(Node *node) {
     return node;
 }
 
+//
+//Node* innerDelete2(Node* node, char* key) {
+//    if(node == NULL) return NULL;
+//
+//    int compare = strcmp(key, node->key);
+//    if(compare < 0) {
+//        node->left = innerDelete2(node->left, key);
+//    }
+//    if(compare > 0) {
+//        node->right = innerDelete2(node->right, key);
+//    }
+//
+//    if(compare == 0) {
+//        if(node->left != NULL && node->right != NULL) {
+//            Node* minNode = findMin(node->right);
+//            free(node->key);
+//            free(node->value);
+//            node->key = copyString(minNode->key);
+//            node->value = copyString(minNode->value);
+//
+//            node->right = innerDelete2(node->right, node->key); // now searching for the value we put to the end
+//
+//        }
+//        else {
+//            if(node->left != NULL) {
+//                Node* save = node;
+//                node = node->left;
+//                freeNode(save);
+//            }
+//            if(node->right != NULL) {
+//                Node* save = node;
+//                node = node->right;
+//                freeNode(save);
+//            }
+//            if(node->right == NULL && node->left == NULL) {
+//                freeNode(node);
+//                node = NULL;
+//            }
+//        }
+//    }
+//    return node;
+//}
+//
+//boolean delete(Tree* tree, char* key) {
+//    if(tree == NULL || key == NULL) return false;
+//    if(search2(tree->root, key) == NULL) return false;
+//
+//    tree->root = innerDelete2(tree->root, key);
+//    return true;
+//}
 
-Node* innerDelete2(Node* node, char* key) {
-    if(node == NULL) return NULL;
+Node * innerDelete(Node * root, char * key) {
+    if (root == NULL)
+        return NULL;
 
-    int compare = strcmp(key, node->key);
-    if(compare < 0) {
-        node->left = innerDelete2(node->left, key);
-    }
-    if(compare > 0) {
-        node->right = innerDelete2(node->right, key);
-    }
+    if (strcmp(key, root -> key) < 0) {
+        root -> left = innerDelete(root -> left, key);
+    } else if (strcmp(key, root -> key) > 0) {
+        root -> right = innerDelete(root -> right, key);
+    } else {
 
-    if(compare == 0) {
-        if(node->left != NULL && node->right != NULL) {
-            Node* minNode = findMin(node->right);
-            free(node->key);
-            free(node->value);
-            node->key = copyString(minNode->key);
-            node->value = copyString(minNode->value);
-
-            node->right = innerDelete2(node->right, node->key); // now searching for the value we put to the end
-
+        if (root -> left == NULL || root -> right == NULL) {
+            if (root -> left == NULL && root -> right == NULL) {
+                freeNode(root);
+                root = NULL;
+            } else if (root -> left == NULL) {
+                Node * tmp = root;
+                root = root -> right;
+                free(tmp);
+            } else if (root -> right == NULL) {
+                Node * tmp = root;
+                root = root -> left;
+                free(tmp);
+            }
+        } else {
+            Node * mn = findMin(root -> right);
+            root -> key = mn -> key;
+            root -> right = innerDelete(root -> right, mn -> key);
         }
-        else {
-            if(node->left != NULL) {
-                Node* save = node;
-                node = node->left;
-                freeNode(save);
-            }
-            if(node->right != NULL) {
-                Node* save = node;
-                node = node->right;
-                freeNode(save);
-            }
-            if(node->right == NULL && node->left == NULL) {
-                freeNode(node);
-                node = NULL;
-            }
-        }
     }
-    return node;
+
+    return root;
 }
 
-boolean delete(Tree* tree, char* key) {
-    if(tree == NULL || key == NULL) return false;
-    if(search2(tree->root, key) == NULL) return false;
-
-    tree->root = innerDelete2(tree->root, key);
-    return true;
+int delete(Tree * tree, char * key) {
+    if (tree == NULL || key == NULL || search2(tree -> root, key) == 0)
+        return 1;
+    tree -> root = innerDelete(tree -> root, key);
+    return 0;
 }
+
 
 
 
