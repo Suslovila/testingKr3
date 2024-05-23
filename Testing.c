@@ -117,9 +117,11 @@ Node* innerDelete2(Node* node, char* key) {
 
     if(compare == 0) {
         if(node->left != NULL && node->right != NULL) {
+            Node* minNode = findMin(node->right);
             free(node->key);
-
-            node->key = copyString(findMin(node->right)->key);
+            free(node->value);
+            node->key = copyString(minNode->key);
+            node->value = copyString(minNode->value);
 
             node->right = innerDelete2(node->right, node->key); // now searching for the value we put to the end
 
